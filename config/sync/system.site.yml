@@ -1,0 +1,15 @@
+uuid: 9948ba40-26ae-4a42-b700-bd3a6453e3b1
+name: WILDLEX
+mail: drupal@eaudeweb.ro
+slogan: 'Database of Wildlife Related Law'
+page:
+  403: ''
+  404: ''
+  front: /node
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
+mail_notification: ''

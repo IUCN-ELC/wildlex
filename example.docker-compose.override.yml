@@ -1,0 +1,31 @@
+version: '3.2'
+
+services:
+
+  app:
+    container_name: wildlex_app
+    restart: unless-stopped
+    volumes:
+      - ./robo.yml:/usr/share/nginx/html/robo.yml
+      - ./.env:/usr/share/nginx/html/.env
+      - ./private:/data/private:rw
+      - ./web/sites/default/files:/usr/share/nginx/html/web/sites/default/files
+    ports:
+      - "127.0.0.1:8080:80"
+
+  db:
+    container_name: wildlex_db
+    restart: unless-stopped
+
+  solr:
+    image: library/solr:7
+    container_name: wildlex_solr
+    restart: unless-stopped
+
+  mail:
+    image: mailhog/mailhog
+    container_name: wildlex_mail
+    restart: unless-stopped
+
+volumes:
+  sites_default_files:

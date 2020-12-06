@@ -1,0 +1,66 @@
+<?php
+function iucn_frontend_preprocess_page(array &$variables) {
+  $config = \Drupal::config('system.site');
+
+  $variables['site_name'] = $config->get('name');
+  $variables['site_slogan'] = $config->get('slogan');
+  $variables['search_api_fulltext'] = !empty($_GET['search_api_fulltext']) ? htmlspecialchars($_GET['search_api_fulltext'], ENT_SUBSTITUTE, 'UTF-8') : '';
+  $get = $_GET;
+  unset($get['search_api_fulltext']);
+  $variables['url_query'] = $get;
+
+  if ($variables['is_front']) {
+    hide($variables['page']['content']['iucn_frontend_content']);
+  }
+  $menu_tree = \Drupal::menuTree();
+  $menu_name = 'homepage-links';
+  $parameters = $menu_tree->getCurrentRouteMenuTreeParameters($menu_name);
+  $tree = $menu_tree->load($menu_name, $parameters);
+  $manipulators = array(
+    // Use the default sorting of menu links.
+    array('callable' => 'menu.default_tree_manipulators:generateIndexAndSort'),
+  );
+  $tree = $menu_tree->transform($tree, $manipulators);
+  $menu = $menu_tree->build($tree);
+  $variables['page']['homepage_links'] = \Drupal::service('renderer')->render($menu);
+
+  $route = \Drupal::request()->get(\Symfony\Cmf\Component\Routing\RouteObjectInterface::ROUTE_NAME);
+  if (!in_array($route, ['view.search.page_2', 'view.search.page_3'])) {
+    $route = 'view.search.page_1';
+  }
+  $variables['search_route'] = \Drupal\Core\Url::fromRoute($route)->toString();
+
+}
+
+function iucn_frontend_theme_suggestions_page_title_alter(array &$suggestions, array $variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $suggestions[] = 'page_title__node__' . $node->getType();
+  }
+}
+
+function iucn_frontend_preprocess_field(array &$variables) {
+  if ($variables['multiple']) {
+    $variables['items_attributes'] = new Drupal\Core\Template\Attribute();
+  }
+
+  if ($variables['element']['#entity_type'] == 'node' &&
+      in_array($variables['element']['#bundle'], ['court_decision', 'legislation', 'literature']) &&
+      $variables['element']['#view_mode'] == 'full') {
+    if ($variables['field_name'] != 'title' && !$variables['label_hidden']) {
+      $variables['attributes']['class'][] = 'row';
+      $variables['title_attributes']['class'][] = 'col-md-3';
+
+      if ($variables['multiple']) {
+        $variables['items_attributes']->addClass('col-md-6');
+      } else {
+        foreach ($variables['items'] as &$item) {
+          $item['attributes']->addClass('col-md-6');
+        }
+      }
+    }
+  }
+}
+
+function iucn_frontend_preprocess_item_list__file_formatter_list(array &$variables) {
+  $variables['attributes']['class'][] = 'list-unstyled';
+}

@@ -1,0 +1,334 @@
+uuid: 90f4aab9-177e-4087-ac91-f7159e987559
+langcode: en
+status: true
+dependencies:
+  module:
+    - search_api_solr
+    - taxonomy
+    - node
+    - search_api
+    - search_api_attachments
+  config:
+    - field.storage.node.field_abstract
+    - field.storage.node.field_country
+    - field.storage.node.field_court
+    - field.storage.node.field_court_jurisdiction
+    - field.storage.node.field_date_of_entry
+    - field.storage.node.field_date_of_modification
+    - field.storage.node.field_date_of_text
+    - field.storage.node.field_decision_status
+    - field.storage.node.field_ecolex_subjects
+    - field.storage.node.field_files
+    - field.storage.node.field_instance
+    - field.storage.taxonomy_term.field_iso
+    - field.storage.node.field_justices
+    - field.storage.node.field_keywords
+    - field.storage.node.field_language_of_document
+    - field.storage.node.field_offences
+    - field.storage.node.field_original_id
+    - field.storage.node.field_original_title
+    - field.storage.node.field_region
+    - field.storage.node.field_source
+    - field.storage.node.field_species
+    - field.storage.node.field_subdivision
+    - field.storage.node.field_territorial_subdivisions
+    - field.storage.node.field_type_of_case
+    - field.storage.node.field_type_of_text
+    - field.storage.node.field_wildlife_legislation
+    - search_api.server.solr_server
+third_party_settings:
+  search_api_solr:
+    multilingual:
+      limit_to_content_language: false
+      include_language_independent: true
+id: default_node_index
+name: 'Default node index'
+description: ''
+read_only: false
+field_settings:
+  field_abstract:
+    label: Abstract
+    datasource_id: 'entity:node'
+    property_path: field_abstract
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_abstract
+  field_country:
+    label: Country
+    datasource_id: 'entity:node'
+    property_path: field_country
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_country
+  field_court:
+    label: Court
+    datasource_id: 'entity:node'
+    property_path: field_court
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_court
+  field_court_jurisdiction:
+    label: 'Court jurisdiction'
+    datasource_id: 'entity:node'
+    property_path: field_court_jurisdiction
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_court_jurisdiction
+  field_date_of_entry:
+    label: 'Date of entry'
+    datasource_id: 'entity:node'
+    property_path: field_date_of_entry
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_of_entry
+  field_date_of_modification:
+    label: 'Date of modification'
+    datasource_id: 'entity:node'
+    property_path: field_date_of_modification
+    type: date
+    dependencies:
+      config:
+        - field.storage.node.field_date_of_modification
+  field_date_of_text:
+    label: 'Date of text'
+    datasource_id: 'entity:node'
+    property_path: field_date_of_text
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_date_of_text
+  field_decision_status:
+    label: 'Decision status'
+    datasource_id: 'entity:node'
+    property_path: field_decision_status
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_decision_status
+  field_ecolex_subjects:
+    label: 'ECOLEX subject(s)'
+    datasource_id: 'entity:node'
+    property_path: field_ecolex_subjects
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_ecolex_subjects
+  field_files:
+    label: Files
+    datasource_id: 'entity:node'
+    property_path: field_files
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_files
+  field_instance:
+    label: Instance
+    datasource_id: 'entity:node'
+    property_path: field_instance
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_instance
+  field_iso:
+    label: 'Country » Taxonomy term » ISO'
+    datasource_id: 'entity:node'
+    property_path: 'field_country:entity:field_iso'
+    type: string
+    dependencies:
+      config:
+        - field.storage.node.field_country
+        - field.storage.taxonomy_term.field_iso
+      module:
+        - taxonomy
+  field_justices:
+    label: Justices
+    datasource_id: 'entity:node'
+    property_path: field_justices
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_justices
+  field_keywords:
+    label: Keywords
+    datasource_id: 'entity:node'
+    property_path: field_keywords
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_keywords
+  field_language_of_document:
+    label: 'Language of document'
+    datasource_id: 'entity:node'
+    property_path: field_language_of_document
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_language_of_document
+  field_offences:
+    label: Offences
+    datasource_id: 'entity:node'
+    property_path: field_offences
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_offences
+  field_original_id:
+    label: 'View in ECOLEX'
+    datasource_id: 'entity:node'
+    property_path: field_original_id
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_original_id
+  field_original_title:
+    label: 'Original title'
+    datasource_id: 'entity:node'
+    property_path: field_original_title
+    type: text
+    dependencies:
+      config:
+        - field.storage.node.field_original_title
+  field_region:
+    label: Region
+    datasource_id: 'entity:node'
+    property_path: field_region
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_region
+  field_source:
+    label: Source
+    datasource_id: 'entity:node'
+    property_path: field_source
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_source
+  field_species:
+    label: Species
+    datasource_id: 'entity:node'
+    property_path: field_species
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_species
+  field_subdivision:
+    label: Subdivision
+    datasource_id: 'entity:node'
+    property_path: field_subdivision
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_subdivision
+  field_territorial_subdivisions:
+    label: 'Territorial subdivisions'
+    datasource_id: 'entity:node'
+    property_path: field_territorial_subdivisions
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_territorial_subdivisions
+  field_type_of_case:
+    label: 'Type of case'
+    datasource_id: 'entity:node'
+    property_path: field_type_of_case
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_type_of_case
+  field_type_of_text:
+    label: 'Type of text'
+    datasource_id: 'entity:node'
+    property_path: field_type_of_text
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_type_of_text
+  field_wildlife_legislation:
+    label: 'Wildlife legislation'
+    datasource_id: 'entity:node'
+    property_path: field_wildlife_legislation
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_wildlife_legislation
+  langcode:
+    label: Language
+    datasource_id: 'entity:node'
+    property_path: langcode
+    type: string
+    dependencies:
+      module:
+        - node
+  nid:
+    label: ID
+    datasource_id: 'entity:node'
+    property_path: nid
+    type: integer
+    dependencies:
+      module:
+        - node
+  saa_field_abstract_files:
+    label: 'Search api attachments: Abstract files'
+    property_path: saa_field_abstract_files
+    type: text
+    boost: !!float 2
+  saa_field_charge_sheet:
+    label: 'Search api attachments: Charge sheet'
+    property_path: saa_field_charge_sheet
+    type: text
+    boost: 0.8
+  saa_field_files:
+    label: 'Search api attachments: Files'
+    property_path: saa_field_files
+    type: text
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: text
+    dependencies:
+      module:
+        - node
+  type:
+    label: 'Content type'
+    datasource_id: 'entity:node'
+    property_path: type
+    type: string
+    dependencies:
+      module:
+        - node
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: true
+      selected:
+        - page
+    languages:
+      default: false
+      selected:
+        - en
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  file_attachments:
+    excluded_extensions: 'aif art avi bmp gif ico mov oga ogv png psd ra ram rgb flv'
+    number_indexed: 0
+    max_filesize: '0'
+    excluded_private: 1
+    excluded_mimes: 'audio/x-aiff image/x-jg video/x-msvideo image/x-ms-bmp image/gif image/vnd.microsoft.icon video/quicktime audio/ogg video/ogg image/png image/x-photoshop audio/x-realaudio audio/x-pn-realaudio image/x-rgb video/x-flv'
+  language_with_fallback: {  }
+  rendered_item: {  }
+  solr_date_range: {  }
+tracker_settings:
+  default:
+    indexing_order: fifo
+options:
+  index_directly: true
+  cron_limit: 1
+server: solr_server

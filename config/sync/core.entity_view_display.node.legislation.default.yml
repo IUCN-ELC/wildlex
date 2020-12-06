@@ -1,0 +1,127 @@
+uuid: 7e7d8347-1347-4610-8097-5556c305a7a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.legislation.field_abstract
+    - field.field.node.legislation.field_country
+    - field.field.node.legislation.field_date_of_entry
+    - field.field.node.legislation.field_date_of_modification
+    - field.field.node.legislation.field_date_of_text
+    - field.field.node.legislation.field_ecolex_subjects
+    - field.field.node.legislation.field_files
+    - field.field.node.legislation.field_isis_number
+    - field.field.node.legislation.field_keywords
+    - field.field.node.legislation.field_language_of_document
+    - field.field.node.legislation.field_original_id
+    - field.field.node.legislation.field_original_title
+    - field.field.node.legislation.field_reference_number
+    - field.field.node.legislation.field_region
+    - field.field.node.legislation.field_territorial_subdivisions
+    - field.field.node.legislation.field_type_of_text
+    - field.field.node.legislation.field_url
+    - node.type.legislation
+  module:
+    - datetime
+    - link
+    - text
+    - user
+id: node.legislation.default
+targetEntityType: node
+bundle: legislation
+mode: default
+content:
+  field_abstract:
+    weight: 9
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
+  field_country:
+    weight: 1
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_date_of_text:
+    weight: 4
+    label: above
+    settings:
+      timezone_override: ''
+      date_format: 'd F Y'
+    third_party_settings: {  }
+    type: datetime_custom
+    region: content
+  field_keywords:
+    weight: 8
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_language_of_document:
+    weight: 6
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_reference_number:
+    weight: 5
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_region:
+    weight: 0
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_territorial_subdivisions:
+    weight: 2
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_type_of_text:
+    weight: 3
+    label: above
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_url:
+    type: link
+    weight: 7
+    region: content
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+hidden:
+  field_date_of_entry: true
+  field_date_of_modification: true
+  field_ecolex_subjects: true
+  field_files: true
+  field_isis_number: true
+  field_original_id: true
+  field_original_title: true
+  links: true
+  search_api_excerpt: true

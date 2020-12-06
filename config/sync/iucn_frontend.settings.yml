@@ -1,0 +1,34 @@
+navbar_position: static-top
+cdn_provider: ''
+_core:
+  default_config_hash: 6JAKvrB01d2UlhyfFIIeqqHyJ8AOKWks5XrRfcNAhec
+favicon:
+  mimetype: image/vnd.microsoft.icon
+  path: ''
+  url: 'http://www.wildlex.org/themes/iucn_frontend/favicon.ico'
+  use_default: true
+breadcrumb: '0'
+region_wells:
+  navigation: ''
+  navigation_collapsible: ''
+  jumbotron_top: ''
+  header: ''
+  highlighted: ''
+  help: ''
+  content: ''
+  sidebar: ''
+  footer: ''
+schemas:
+  bootstrap: 8000
+  iucn_frontend: 8000
+logo:
+  path: 'public://WILDLEXlogo_large.png'
+  url: ''
+  use_default: true
+table: ''
+features:
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+  node_user_picture: true
+table_responsive: -1

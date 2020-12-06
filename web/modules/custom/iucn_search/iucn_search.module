@@ -1,0 +1,426 @@
+<?php
+
+use Drupal\Core\Database\Database;
+use Drupal\Core\Url;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Views;
+
+/**
+ * @param array $build
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ * @param string $destination_field
+ * @param string $field
+ */
+function concat_fields_display(array &$build, \Drupal\Core\Entity\EntityInterface $entity, $destination_field, $field) {
+  if (!empty($build[$destination_field])) {
+    $args = func_get_args();
+    $k = 1;
+    for ($i = 3; $i < count($args); $i++) {
+      $field = $args[$i];
+      if (!empty($build[$field][0])) {
+        $build[$destination_field][$k++] = $build[$field][0];
+        hide($build[$field]);
+      }
+    }
+  }
+}
+
+function literature_is_article(\Drupal\node\NodeInterface $node) {
+  return !empty($node->field_date_of_text_ser->value);
+}
+
+function literature_is_chapter(\Drupal\node\NodeInterface $node) {
+  return !empty($node->field_original_id->value)
+    && (strpos($node->field_original_id->value, 'ANA') === 0)
+    && literature_is_article($node) == FALSE;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function iucn_search_node_view(array &$build, \Drupal\node\NodeInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+
+  if ($entity->bundle() === 'literature') {
+    if ($view_mode === 'full') {
+      concat_fields_display($build, $entity, 'field_publisher', 'field_publication_place', 'field_date_of_text');
+
+      // https://trello.com/c/5qu73PMB
+      if (!empty($entity->field_author->value) && !empty($entity->field_corp_author->value)) {
+        hide($build['field_corp_author']);
+      }
+
+      if (literature_is_article($entity)) {
+        concat_fields_display($build, $entity, 'field_serial_title', 'field_volume_number', 'field_collation');
+        hide($build['field_paper_title_of_text']);
+      }
+      elseif (literature_is_chapter($entity)) {
+        concat_fields_display($build, $entity, 'field_paper_title_of_text', 'field_volume_number', 'field_collation');
+        hide($build['field_serial_title']);
+      }
+      else {
+        hide($build['field_paper_title_of_text']);
+        hide($build['field_serial_title']);
+      }
+
+      if (!empty($entity->field_country->getValue())) {
+        hide($build['field_scope']);
+      }
+    }
+
+    if ($view_mode === 'search_result') {
+      if (strpos($entity->field_original_id->value, 'MON') === 0) {
+        hide($build['field_collection']);
+        hide($build['field_collation']);
+      }
+
+      // Display maximum 3 countries or show the 'International' scope
+      $countries = $entity->field_country->getValue();
+      if (empty($countries)) {
+        $scope = $entity->field_scope->entity;
+        if ($scope instanceof \Drupal\taxonomy\TermInterface && $scope->label() == 'International') {
+          $build['field_country'] = $build['field_scope'];
+        }
+      }
+      else {
+        $max = -1;
+        for ($i = 0; $i < count($countries); $i++) {
+          if ($i >= 3) {
+            unset($build['field_country'][$i]);
+          }
+          else {
+            $max++;
+            $build['field_country'][$i]['#suffix'] = ',';
+          }
+        }
+
+        if (count($countries) > 3) {
+          $build['field_country'][$max]['#suffix'] = '...';
+        }
+        else {
+          $build['field_country'][$max]['#suffix'] = '';
+        }
+      }
+      hide($build['field_scope']);
+    }
+  }
+
+  if ($entity->bundle() === 'court_decision') {
+    $build['title'][0]['#context']['value'] = $build['#node']->field_original_title[0]->value;
+
+    $faolex_ref = [];
+
+    if (isset($build['field_reference_to_faolex_title'][0])) {
+      $faolex_ref['title'] = $build['field_reference_to_faolex_title'][0]['#context']['value'];
+
+      hide($build['field_reference_to_faolex_title']);
+    }
+
+    if (isset($build['field_reference_to_faolex_date'][0])) {
+      $faolex_ref['date'] = $build['field_reference_to_faolex_date'][0]['#markup'];
+
+      hide($build['field_reference_to_faolex_date']);
+    }
+
+    if (isset($build['field_reference_to_faolex_countr'][0])) {
+      $faolex_ref['country'] = $build['field_reference_to_faolex_countr'][0]['#plain_text'];
+
+      hide($build['field_reference_to_faolex_countr']);
+    }
+
+    $config = \Drupal::config('iucn_search.settings');
+    if (isset($build['field_reference_to_faolex'][0])) {
+      $pattern = $config->get('reference_to_legislation_pattern');
+      $uri = str_replace('$RECID', $build['field_reference_to_faolex'][0]['#context']['value'], $pattern);
+      $url = \Drupal\Core\Url::fromUri($uri);
+      $text = empty($faolex_ref) ? $build['field_reference_to_faolex'][0]['#context']['value'] : implode(', ', $faolex_ref);
+      $link = \Drupal\Core\Link::fromTextAndUrl($text, $url)->toRenderable();
+      $link['#attributes']['target'] = '_blank';
+      $build['field_reference_to_faolex'][0]['#context']['value'] = $link;
+    }
+
+    if (!empty($build['field_reference_to_treaties']['#items'])) {
+      $pattern = $config->get('reference_to_treaty_pattern');
+      $items = [];
+      foreach ($build['field_reference_to_treaties']['#items'] as $key => $item) {
+        $uri = str_replace('$RECID', $item->getValue()['value'], $pattern);
+        if (!empty($uri)) {
+          if (!array_key_exists($key, $items)) {
+            $items[$key] = [];
+          }
+          $items[$key]['id'] = $items[$key]['text'] = $item->getValue()['value'];
+          $items[$key]['url'] = \Drupal\Core\Url::fromUri($uri);
+        }
+      }
+      foreach ($build['field_reference_to_treaties_titl']['#items'] as $key => $item) {
+        if (array_key_exists($key, $items)) {
+          $items[$key]['text'] = $item->getValue()['value'];
+        }
+      }
+      foreach ($items as $key => $item) {
+        $link = \Drupal\Core\Link::fromTextAndUrl($item['text'], $item['url'])
+          ->toRenderable();
+        $link['#attributes']['target'] = '_blank';
+        $build['field_reference_to_treaties'][$key]['#context']['value'] = $link;
+      }
+      hide($build['field_reference_to_treaties_titl']);
+    }
+
+    if (isset($build['field_original_id'][0])) {
+      $pattern = $config->get('reference_to_ecolex_pattern');
+      $id = $build['field_original_id'][0]['#context']['value'];
+      $uri = str_replace('$RECID', $id, $pattern);
+      $url = \Drupal\Core\Url::fromUri($uri);
+      $link = \Drupal\Core\Link::fromTextAndUrl($id, $url)->toRenderable();
+      $link['#attributes']['target'] = '_blank';
+      $build['field_original_id'][0]['#context']['value'] = $link;
+    }
+
+    if ($view_mode === 'search_result') {
+      if (isset($build['#node']->solr_title)) {
+        $build['title'][0]['#template'] = '{{ value|raw }}';
+        $build['title'][0]['#context']['value'] = $build['#node']->solr_title;
+      }
+
+      if (isset($build['#node']->solr_abstract)) {
+        $build['field_abstract'][0]['#text'] = $build['#node']->solr_abstract;
+        $build['field_abstract'][0]['#format'] = 'basic_html';
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function iucn_search_cron() {
+  if (function_exists('drush_log')) {
+    drush_log('Increase SESSION wait_timeout');
+  }
+  Database::getConnection('default')
+    ->query("SET SESSION innodb_lock_wait_timeout = 4800");
+  Database::getConnection('default')->query("SET SESSION wait_timeout = 4800");
+
+  $migrations = [
+    'elis_consumer_legislations',
+    'elis_consumer_literatures',
+    'elis_consumer_court_decisions',
+  ];
+
+  /** @var \Drupal\migrate\Plugin\MigrationPluginManager $service */
+  $service = \Drupal::service('plugin.manager.migration');
+  $migrate_last_imported_store = \Drupal::keyValue('migrate_last_imported');
+
+  $run_interval = \Drupal::config('migrate_cron')->get('run_interval');
+  if (!$run_interval) {
+    $run_interval = 0;
+  }
+
+  // First, set all migration status to "Idle".
+  foreach ($migrations as $migrationName) {
+    $last_run = \Drupal::state()
+      ->get('iucn_search.migration_last_run.' . $migrationName, NULL);
+    if (empty($last_run) || (time() - $last_run) >= $run_interval /* custom */) {
+      /** @var \Drupal\migrate\Plugin\Migration $migration */
+      if ($migration = $service->createInstance($migrationName)) {
+        if ($migration->getStatus() != \Drupal\migrate\Plugin\MigrationInterface::STATUS_IDLE) {
+          $migration->setStatus(\Drupal\migrate\Plugin\MigrationInterface::STATUS_IDLE);
+        }
+      }
+    }
+  }
+
+  foreach ($migrations as $migrationName) {
+    $last_run = \Drupal::state()
+      ->get('iucn_search.migration_last_run.' . $migrationName, NULL);
+    if (empty($last_run) || (time() - $last_run) >= $run_interval /* custom */) {
+      /** @var \Drupal\migrate\Plugin\Migration $migration */
+      if ($migration = $service->createInstance($migrationName)) {
+        \Drupal::state()
+          ->set('iucn_search.migration_last_run.' . $migrationName, time());
+
+        // Run the migration.
+        $migration->setTrackLastImported(TRUE);
+        $migration->getIdMap()->prepareUpdate();
+        $executable = new \Drupal\migrate\MigrateExecutable($migration, new \Drupal\migrate\MigrateMessage());
+        $executable->import();
+        $migrate_last_imported_store->set($migration->id(), round(microtime(TRUE) * 1000));
+      }
+      else {
+        \Drupal::logger('migrate')
+          ->critical(t('Could\'t run migration @migration', ['@migration' => $migrationName]));
+      }
+    }
+  }
+
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function iucn_search_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id) {
+  if ($form_id == 'contact_message_feedback_form') {
+    $form['actions']['preview']['#access'] = FALSE;
+  }
+
+  if ($form_id == 'views_exposed_form' && empty(\Drupal::request()->query->get('sort_by'))) {
+    switch ($form['#id']) {
+      case 'views-exposed-form-search-page-1':
+        $form['sort_by']['#value'] = 'search_api_relevance';
+        break;
+
+      case 'views-exposed-form-search-page-2':
+      case 'views-exposed-form-search-page-3':
+        $form['sort_by']['#value'] = 'field_date_of_text';
+        break;
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function iucn_search_views_pre_build(ViewExecutable $view) {
+  if ($view->id() == 'ws_provider' && $view->current_display == 'court_decisions') {
+    $items_per_page = \Drupal::request()->get('items_per_page') ?: 10;
+    $offset = \Drupal::request()->get('offset') ?: 0;
+    $view->setItemsPerPage($items_per_page);
+    $view->setOffset($offset);
+  }
+}
+
+function iucn_search_preprocess_views_view(array &$variables) {
+  $view = $variables['view'];
+  if (empty($view) || !$view instanceof ViewExecutable) {
+    return;
+  }
+
+  switch ($view->id()) {
+    case 'search':
+      $variables['attachment_before']['map']['button'] = [
+        '#type' => 'link',
+        '#url' => Url::fromUserInput('#'),
+        '#title' => t('Show on map'),
+        '#attributes' => [
+          'data-toggle' => 'modal',
+          'data-target' => '#search_modal',
+          'class' => ['search-modal-opener'],
+        ],
+        '#attached' => [
+          'library' => [
+            'iucn_search/iucn_search.map.js',
+            'wildlex_map/d3.js',
+            'wildlex_map/topojson.js',
+            'wildlex_map/datamaps.js',
+            'wildlex_map/wildlex.map.js',
+          ],
+        ],
+      ];
+
+      $view_all = Views::getView($view->id());
+      $pager = $view->pager;
+      $display_id = $view->current_display;
+      $view_all->setCurrentPage(0);
+      $view_all->setDisplay($display_id);
+      $view_all->setItemsPerPage(9999999);
+      $view_all->preview($display_id);
+      $count = count($view_all->result);
+
+      $countries = [];
+      foreach ($view_all->result as $result_row) {
+        $node = $result_row->_object->getEntity();
+        $country = $node->field_country;
+
+        if (empty($country->target_id)) {
+          continue;
+        }
+
+        /** @var \Drupal\taxonomy\TermInterface $country_entity */
+        $country_entity = $country->entity;
+
+        $id = $country_entity->id();
+
+        if (empty($countries[$id])) {
+          $countries[$id] = [
+            0 => $country_entity->get('field_iso')->value,
+            1 => 0,
+            2 => $id,
+          ];
+        }
+        $countries[$id][1]++;
+      }
+
+      $view_all = Views::getView($view->id());
+      $view_all->setDisplay($display_id);
+      $view_all->pager = $pager;
+      $view_all->execute();
+
+      $countries = array_values($countries);
+      $variables['#attached']['drupalSettings']['series'] = $countries;
+
+      switch ($view->current_display) {
+        case 'page_1':
+          $content_type = [
+            'machine_name' => 'court_decision',
+            'singular' => 'court decisions',
+            'plural' => 'court decisions',
+          ];
+          break;
+        case 'page_2':
+          $content_type = [
+            'machine_name' => 'legislation',
+            'singular' => 'legislation',
+            'plural' => 'legislations',
+          ];
+          break;
+        case 'page_3':
+          $content_type = [
+            'machine_name' => 'literature',
+            'singular' => 'literature',
+            'plural' => 'literatures',
+          ];
+          break;
+        default:
+          return;
+      }
+
+      $variables['#attached']['drupalSettings']['content_type'] = t(ucfirst($content_type['singular']));
+      $variables['#attached']['drupalSettings']['search_base_url'] = \Drupal::request()->getUri();
+      $variables['#attached']['drupalSettings']['search_base_url'] .= empty(\Drupal::request()->query->all()) ? '?' : '&';
+
+      /** @var \Drupal\wildlex_map\CountriesMapService $countriesMapService */
+      $countriesMapService = \Drupal::service('wildlex_map.countries_map');
+
+      $variables['attachment_before']['map']['modal'] = $countriesMapService
+        ->getModalBuild($content_type, $count);
+
+      if (empty($view_all->result)) {
+        $variables['attachment_after'] = [
+          '#attributes' => ['class' => ['well', 'blankslate']],
+          '#type' => 'container',
+          [
+            '#attributes' => [
+              'class' => [
+                'ecolexicon',
+                'ecolexicon-' . str_replace('_', '-', $content_type['machine_name']),
+              ],
+            ],
+            '#tag' => 'span',
+            '#type' => 'html_tag',
+          ],
+          [
+            '#attributes' => ['class' => ['blankslate-title']],
+            '#tag' => 'h3',
+            '#type' => 'html_tag',
+            '#value' => t('No results found.'),
+          ],
+          [
+            '#attributes' => ['class' => []],
+            '#tag' => 'p',
+            '#type' => 'html_tag',
+            '#value' => t('Use the links above to find what you&rsquo;re looking for, or try a new search query. The Search filters are also super helpful for quickly finding results most relevant to you.'),
+          ],
+        ];
+      }
+      break;
+  }
+}

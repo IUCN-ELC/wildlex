@@ -1,0 +1,16 @@
+version: '3.2'
+
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: .docker/app/Dockerfile
+      args:
+        # export GIT_COMMIT=$(git rev-parse --short --verify HEAD)
+        GIT_COMMIT: "${GIT_COMMIT}"
+    env_file: .env
+
+  db:
+    image: library/mariadb:latest
+    env_file: .env

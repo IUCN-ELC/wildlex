@@ -1,0 +1,54 @@
+uuid: 8ba18e4d-00e9-46ca-8aa3-30dd8678d22c
+langcode: en
+status: false
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.legislation.field_abstract
+    - field.field.node.legislation.field_country
+    - field.field.node.legislation.field_date_of_entry
+    - field.field.node.legislation.field_date_of_modification
+    - field.field.node.legislation.field_date_of_text
+    - field.field.node.legislation.field_ecolex_subjects
+    - field.field.node.legislation.field_files
+    - field.field.node.legislation.field_isis_number
+    - field.field.node.legislation.field_keywords
+    - field.field.node.legislation.field_language_of_document
+    - field.field.node.legislation.field_original_id
+    - field.field.node.legislation.field_original_title
+    - field.field.node.legislation.field_reference_number
+    - field.field.node.legislation.field_region
+    - field.field.node.legislation.field_territorial_subdivisions
+    - field.field.node.legislation.field_type_of_text
+    - field.field.node.legislation.field_url
+    - node.type.legislation
+  module:
+    - user
+id: node.legislation.teaser
+targetEntityType: node
+bundle: legislation
+mode: teaser
+content:
+  links:
+    weight: 100
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_abstract: true
+  field_country: true
+  field_date_of_entry: true
+  field_date_of_modification: true
+  field_date_of_text: true
+  field_ecolex_subjects: true
+  field_files: true
+  field_isis_number: true
+  field_keywords: true
+  field_language_of_document: true
+  field_original_id: true
+  field_original_title: true
+  field_reference_number: true
+  field_region: true
+  field_territorial_subdivisions: true
+  field_type_of_text: true
+  field_url: true

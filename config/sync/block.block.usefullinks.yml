@@ -1,0 +1,30 @@
+uuid: 8830b5e7-22f2-4f3b-9800-a2a2ef9ea5ce
+langcode: en
+status: false
+dependencies:
+  config:
+    - system.menu.homepage-links
+  module:
+    - system
+  theme:
+    - iucn_frontend
+id: usefullinks
+theme: iucn_frontend
+region: navigation
+weight: -5
+provider: null
+plugin: 'system_menu_block:homepage-links'
+settings:
+  id: 'system_menu_block:homepage-links'
+  label: 'Useful links'
+  provider: system
+  label_display: visible
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility:
+  request_path:
+    id: request_path
+    pages: "/search*\r\n/legislation\r\n/resources\r\n/literature"
+    negate: false
+    context_mapping: {  }

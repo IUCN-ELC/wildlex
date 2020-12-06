@@ -1,0 +1,87 @@
+uuid: 892c7095-a37c-4ef1-a8eb-1e7b58510ccf
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.search_result
+    - field.field.node.legislation.field_abstract
+    - field.field.node.legislation.field_country
+    - field.field.node.legislation.field_date_of_entry
+    - field.field.node.legislation.field_date_of_modification
+    - field.field.node.legislation.field_date_of_text
+    - field.field.node.legislation.field_ecolex_subjects
+    - field.field.node.legislation.field_files
+    - field.field.node.legislation.field_isis_number
+    - field.field.node.legislation.field_keywords
+    - field.field.node.legislation.field_language_of_document
+    - field.field.node.legislation.field_original_id
+    - field.field.node.legislation.field_original_title
+    - field.field.node.legislation.field_reference_number
+    - field.field.node.legislation.field_region
+    - field.field.node.legislation.field_territorial_subdivisions
+    - field.field.node.legislation.field_type_of_text
+    - field.field.node.legislation.field_url
+    - node.type.legislation
+  module:
+    - datetime
+    - user
+id: node.legislation.search_result
+targetEntityType: node
+bundle: legislation
+mode: search_result
+content:
+  field_country:
+    type: entity_reference_label
+    weight: 0
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_date_of_text:
+    weight: 3
+    label: hidden
+    settings:
+      timezone_override: ''
+      date_format: 'Y'
+    third_party_settings: {  }
+    type: datetime_custom
+    region: content
+  field_reference_number:
+    type: string
+    weight: 4
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    region: content
+  field_territorial_subdivisions:
+    type: entity_reference_label
+    weight: 2
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    region: content
+  field_type_of_text:
+    weight: 1
+    label: hidden
+    settings:
+      link: false
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden:
+  field_abstract: true
+  field_date_of_entry: true
+  field_date_of_modification: true
+  field_ecolex_subjects: true
+  field_files: true
+  field_isis_number: true
+  field_keywords: true
+  field_language_of_document: true
+  field_original_id: true
+  field_original_title: true
+  field_region: true
+  field_url: true
+  links: true

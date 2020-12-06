@@ -1,0 +1,8 @@
+uuid: 22b1db3a-c882-44f5-b4ee-fe33d88990dc
+langcode: en
+status: true
+dependencies: {  }
+name: Scopes
+vid: scopes
+description: ''
+weight: 0

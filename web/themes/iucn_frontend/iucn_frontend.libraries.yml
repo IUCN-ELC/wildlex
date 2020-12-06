@@ -1,0 +1,79 @@
+application:
+  version: 1.0.0
+  js:
+    assets/js/application.min.js: { minified: true }
+    js/main.js: {}
+
+  dependencies:
+    - iucn_frontend/bootstrap-switch
+    - iucn_frontend/ion-rangeslider
+    - iucn_frontend/select2
+
+bootstrap:
+  version: 3.3.7
+  css:
+    theme:
+      assets/vendor/bootstrap/css/bootstrap.min.css: { minified: true }
+  js:
+    assets/vendor/bootstrap/js/bootstrap.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+
+bootstrap-overrides:
+  version: 3.3.7
+  css:
+    theme:
+      /themes/contrib/bootstrap/css/3.3.7/overrides.min.css: { minified: true }
+  dependencies:
+    - iucn_frontend/bootstrap
+
+bootstrap-switch:
+  version: 3.3.2
+  css:
+    theme:
+      assets/vendor/bootstrap-switch/css/bootstrap3/bootstrap-switch.min.css: { minified: true }
+  js:
+    assets/vendor/bootstrap-switch/js/bootstrap-switch.min.js: { minified: true }
+  dependencies:
+    - iucn_frontend/bootstrap
+
+fonts:
+  css:
+    theme:
+      //fonts.googleapis.com/css?family=Noto+Sans:400,700&subset=latin,latin-ext: { type: external }
+
+global-styling:
+  version: 1.0.0
+  css:
+    theme:
+      assets/css/style.min.css: { minified: true }
+  dependencies:
+    - iucn_frontend/bootstrap
+    - iucn_frontend/fonts
+
+ion-rangeslider:
+  version: 2.1.4
+  css:
+    theme:
+      assets/vendor/ion-rangeslider/css/ion.rangeSlider.css: {}
+  js:
+    assets/vendor/ion-rangeslider/js/ion.rangeSlider.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+
+select2:
+  version: 4.0.2
+  css:
+    theme:
+      assets/vendor/select2/css/select2.min.css: { minified: true }
+  js:
+    assets/vendor/select2/js/select2.min.js: { minified: true }
+  dependencies:
+    - core/jquery
+
+drupal.facets.dropdown-widget:
+  version: VERSION
+  js:
+    js/dropdown-widget.js: {}
+  dependencies:
+    - facets/widget

@@ -1,0 +1,31 @@
+uuid: 9e34c9db-d069-4a06-9200-a1384be59f61
+langcode: en
+status: false
+dependencies:
+  content:
+    - 'block_content:basic:f8b99306-6bf9-44ff-8e00-eaeb2f32c0f3'
+  module:
+    - block_content
+    - system
+  theme:
+    - iucn_frontend
+id: otherresources
+theme: iucn_frontend
+region: navigation
+weight: -7
+provider: null
+plugin: 'block_content:f8b99306-6bf9-44ff-8e00-eaeb2f32c0f3'
+settings:
+  id: 'block_content:f8b99306-6bf9-44ff-8e00-eaeb2f32c0f3'
+  label: 'Other resources'
+  provider: block_content
+  label_display: visible
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    pages: '<front>'
+    negate: false
+    context_mapping: {  }

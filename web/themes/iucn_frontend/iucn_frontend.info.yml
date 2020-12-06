@@ -1,0 +1,40 @@
+core: 8.x
+type: theme
+base theme: bootstrap
+
+name: 'IUCN Wildlife'
+description: 'Front-end theme for IUCN Wildlife.'
+package: 'Bootstrap'
+
+regions:
+  navigation: 'Navigation'
+  navigation_collapsible: 'Navigation (Collapsible)'
+  jumbotron_top: 'Jumbotron top bar'
+  header: 'Top Bar'
+  highlighted: 'Highlighted'
+  help: 'Help'
+  content: 'Content'
+  sidebar_facets: 'Sidebar facets'
+  sidebar: 'Sidebar'
+  footer: 'Footer'
+  page_top: 'Page top'
+  page_bottom: 'Page bottom'
+
+libraries:
+  - iucn_frontend/application
+  - iucn_frontend/bootstrap
+  - iucn_frontend/bootstrap-switch
+  - iucn_frontend/fonts
+  - iucn_frontend/global-styling
+  - iucn_frontend/select2
+
+libraries-extend:
+  bootstrap/drupal.bootstrap:
+    - iucn_frontend/bootstrap-overrides
+
+libraries-override:
+  eu_cookie_compliance/eu_cookie_compliance:
+    css:
+      state:
+        css/eu_cookie_compliance.css: false
+  facets/drupal.facets.dropdown-widget: iucn_frontend/drupal.facets.dropdown-widget

@@ -1,0 +1,90 @@
+html {
+  min-height: 100vh;
+  position: relative;
+}
+
+body {
+  padding-bottom: 138px;
+  position: static;
+
+  &.path-frontpage {
+    min-height: 100vh;
+    padding-bottom: 92px;
+  }
+}
+
+.footer {
+  border-color: #ddd;
+  bottom: 0;
+  color: #808080;
+  font-size: 14px;
+  min-height: 92px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  position: absolute;
+  width: 100%;
+
+  a {
+    color: #808080;
+  }
+
+  a:hover,
+  a:focus {
+    color: #666;
+  }
+
+  .logos {
+    float: left;
+    margin: 0 0 0 -10px;
+
+    a {
+      display: block;
+    }
+    img {
+      max-width: 100%;
+    }
+  }
+}
+
+#block-iucn-frontend-footer {
+  float: right;
+  margin-top: 14px;
+
+  .nav > li > a {
+    &:hover,
+    &:focus {
+      background-color: transparent;
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 195px;
+
+    &.path-frontpage {
+      padding-bottom: 149px;
+    }
+  }
+
+  .footer {
+    min-height: 149px;
+    text-align: center;
+
+    .logos {
+      align-items: center;
+      display: inline-flex;
+      float: none;
+    }
+  }
+
+  #block-iucn-frontend-footer {
+    display: inline-block;
+    float: none;
+  }
+}
+
+.iucn-logo {
+  margin-right: 1em;
+}
