@@ -809,7 +809,7 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 # SMTP module
 if (!empty(getenv('DRUPAL_SMTP_HOST_ON'))) {
-  $config['smtp.settings']['smtp_on'] = TRUE;
+  $config['smtp.settings']['smtp_on'] = true;
 }
 if (!empty(getenv('DRUPAL_SMTP_HOST'))) {
   $config['smtp.settings']['smtp_host'] = getenv('DRUPAL_SMTP_HOST');
