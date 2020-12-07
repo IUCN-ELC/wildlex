@@ -35,7 +35,7 @@ backend_config:
   connector_config:
     scheme: http
     host: localhost
-    port: '8983'
+    port: 8983
     path: /
     core: wildlex-prod
     timeout: 25
@@ -47,7 +47,7 @@ backend_config:
     http_method: AUTO
     skip_schema_check: null
     jmx: false
-    solr_install_dir: '/opt/solr'
+    solr_install_dir: /opt/solr
     username: super-duper
     password: secret
   disabled_field_types: {  }
