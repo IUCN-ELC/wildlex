@@ -553,7 +553,9 @@ if ($settings['hash_salt']) {
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
  */
-$settings['file_private_path'] = '/data/private';
+if (!empty(getenv('DRUPAL_PRIVATE_FILES_PATH'))) {
+  $settings['file_private_path'] = getenv('DRUPAL_PRIVATE_FILES_PATH');
+}
 
 /**
  * Temporary file path:
