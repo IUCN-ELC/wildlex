@@ -31,22 +31,25 @@ name: 'SOLR Server'
 description: ''
 backend: search_api_solr
 backend_config:
-  connector: standard
+  connector: basic_auth
   connector_config:
     scheme: http
     host: localhost
-    port: 8983
+    port: '8983'
     path: /
-    core: wildlex-new
+    core: wildlex-prod
     timeout: 25
     index_timeout: 20
     optimize_timeout: 10
     finalize_timeout: 30
     commit_within: 1000
-    solr_version: '7'
+    solr_version: ''
     http_method: AUTO
+    skip_schema_check: null
     jmx: false
-    solr_install_dir: /opt/solr
+    solr_install_dir: '/opt/solr'
+    username: super-duper
+    password: secret
   disabled_field_types: {  }
   disabled_caches: {  }
   disabled_request_handlers:
@@ -56,9 +59,10 @@ backend_config:
   disabled_request_dispatchers:
     - request_dispatcher_httpcaching_default_7_0_0
   rows: 10
+  index_single_documents_fallback_count: 10
   retrieve_data: true
   highlight_data: true
-  skip_schema_check: false
+  fallback_multiple: true
   server_prefix: ''
   domain: generic
   environment: default
