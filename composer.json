@@ -39,6 +39,7 @@
         "drupal/facets": "1.4.0",
         "drupal/field_delimiter": "1.0.0",
         "drupal/google_analytics": "2.4.0",
+        "drupal/honeypot": "2.0.1",
         "drupal/linkit": "5.0.0-beta9",
         "drupal/mailsystem": "4.1.0",
         "drupal/menu_link_attributes": "1.0.0",
