@@ -1,0 +1,25 @@
+uuid: 12e4ebea-d0ae-4d36-9f89-f7ff24296362
+langcode: en
+status: true
+dependencies: {  }
+id: 5b5238f42b
+name: Varnish
+invalidationtype: tag
+hostname: localhost
+port: 443
+path: /
+request_method: BAN
+scheme: https
+verify: '1'
+headers:
+  -
+    field: Cache-Tags
+    value: '[invalidation:expression]'
+body: null
+body_content_type: null
+runtime_measurement: true
+timeout: !!float 1
+connect_timeout: !!float 1
+cooldown_time: !!float 0
+max_requests: 100
+http_errors: true

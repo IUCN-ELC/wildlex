@@ -152,7 +152,7 @@ $settings['skip_permissions_hardening'] = TRUE;
  * to use this feature with modules that affect Drupal in a major way such as
  * the language or field module.
  */
-$settings['config_exclude_modules'] = ['automated_cron', 'config', 'contextual', 'field_ui', 'quickedit', 'shortcut', 'views_ui'];
+$settings['config_exclude_modules'] = ['automated_cron', 'contextual', 'field_ui', 'purge_ui', 'quickedit', 'shortcut', 'views_ui'];
 
 $config['smtp.settings']['smtp_on'] = 'on';
 $config['smtp.settings']['smtp_host'] = 'localhost';
