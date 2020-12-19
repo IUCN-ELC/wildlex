@@ -2,6 +2,11 @@ version: '3.2'
 
 services:
 
+  cache:
+    container_name: tpl_varnish
+    ports:
+      - "127.0.0.1:8090:80"
+
   app:
     container_name: wildlex_app
     restart: unless-stopped
@@ -10,8 +15,8 @@ services:
       - ./.env:/usr/share/nginx/html/.env
       - ./private:/data/private:rw
       - ./web/sites/default/files:/usr/share/nginx/html/web/sites/default/files
-    ports:
-      - "127.0.0.1:8080:80"
+#    ports:
+#      - "127.0.0.1:8080:80"
 
   db:
     container_name: wildlex_db
