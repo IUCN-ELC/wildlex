@@ -866,6 +866,11 @@ if (!empty(getenv('SOLR_DEFAULT_SERVER_PASSWORD'))) {
   $config['search_api.server.solr_server']['backend_config']['connector_config']['password'] = getenv('SOLR_DEFAULT_SERVER_PASSWORD');
 }
 
+# Varnish integration
+$config['varnish_purger.settings.5b5238f42b']['hostname'] = getenv('VARNISH_HOSTNAME');
+$config['varnish_purger.settings.5b5238f42b']['scheme'] = getenv('VARNISH_SCHEME');
+$config['varnish_purger.settings.5b5238f42b']['port'] = getenv('VARNISH_PORT');
+
 # WILDLEX specific configuration
 $config['search_api.settings']['cron_worker_runtime'] = getenv('WILDLEX_SEARCH_API_CRON_RUNTIME');
 $config['migrate_cron']['run_interval'] = getenv('MIGRATE_CRON_RUN_INTERVAL');
