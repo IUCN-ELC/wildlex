@@ -55,8 +55,8 @@ jobs:
           SSH_KEY: ${{ secrets.TEST_SSH_KEY }}
           SSH_HOST: ${{ secrets.TEST_SSH_HOST }}
       - name: Fetch latest image
-        run: cd /var/local/wildlex-test/ && sudo docker-compose pull
+        run: ssh testinstance 'cd /var/local/wildlex-test/ && sudo docker-compose pull'
       - name: Restart the app container
-        run: cd /var/local/wildlex-test/ && sudo /usr/bin/docker-compose restart app
+        run: ssh testinstance 'cd /var/local/wildlex-test/ && sudo /usr/bin/docker-compose restart app'
       - name: Deploy the updates
-        run: sudo /usr/bin/docker exec -ti * ./vendor/bin/robo site:update
+        run: ssh testinstance 'sudo /usr/bin/docker exec -ti * ./vendor/bin/robo site:update'
