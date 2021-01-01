@@ -6,7 +6,7 @@ on:
       - test
 
 env:
-  IMAGE_NAME: cristiroma/wildlex
+  IMAGE_NAME: ${{ secrets.DOCKERHUB_REPOSITORY }}
 
 jobs:
   build:
@@ -59,4 +59,4 @@ jobs:
       - name: Restart the app container
         run: ssh testinstance 'cd /var/local/wildlex-test/ && sudo /usr/bin/docker-compose restart app'
       - name: Deploy the updates
-        run: ssh testinstance 'sudo /usr/bin/docker exec -ti * ./vendor/bin/robo site:update'
+        run: ssh testinstance 'sudo /usr/bin/docker exec -ti ${{ secrets.TEST_APP_CONTAINER_NAME }} ./vendor/bin/robo site:update'
