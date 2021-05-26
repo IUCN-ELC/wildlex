@@ -1,29 +1,51 @@
-<!-- @file Instructions on how to sub-theme the Drupal Bootstrap base theme using the CDN Starterkit. -->
-<!-- @defgroup subtheme_cdn -->
-<!-- @ingroup subtheme -->
-# CDN Starterkit
+# IUCN Wildlife Theme
 
-The CDN Starterkit is rather simple to set up. You don't have to do anything
-until you wish to override the default [Drupal Bootstrap] base theme settings
-or provide additional custom CSS.
+- [Prerequisites](#prerequisites)
+- [Building the theme](#building the theme)
+- [Overrides](#overrides)
+- [References](#references)
 
-- [Prerequisite](#prerequisite)
-- [Override Styles](#styles)
-- [Override Settings](#settings)
-- [Override Templates and Theme Functions](#registry)
+## Prerequisites
+- [nvm]
+- [npm]
+- [Gulp]
+- [Sass]
 
-## Prerequisite
-Read the @link subtheme Sub-theming @endlink parent topic.
+## Building the theme
 
-## Override Styles {#styles}
-Open `./subtheme/css/style.css` and modify the file to your liking.
+`nvm install` to install the proper node version
 
-## Override Settings {#settings}
-Please refer to the @link subtheme_settings Sub-theme Settings @endlink topic.
+`nvm use` to set the proper node version
 
-## Override Templates and Theme Functions {#registry}
-Please refer to the @link registry Theme Registry @endlink topic.
+`npm install`
 
-[Drupal Bootstrap]: https://www.drupal.org/project/bootstrap
-[Bootstrap Framework]: http://getbootstrap.com
-[jsDelivr CDN]: http://www.jsdelivr.com
+If you encounter `Error: Node Sass does not yet support your current environment` you may have to run `npm rebuild node-sass`.
+
+`npm run theme:build` for one-time theme building.
+
+`npm run theme:watch` to build and start a watcher.
+
+## Overrides
+
+Details of folder structure, framework overrides may go here.
+
+## Updating Bootstrap (for Bootstrap-based themes)
+
+Download and extract the **latest** version of [Bootstrap Framework Source Files] into `bootstrap` folder.
+
+**WARNING:** Do not modify files inside `bootstrap` to allow easy upgrades in the future.
+
+## References
+- [nvm]
+- [npm]
+- [Gulp]
+- [Sass]
+- [Bootstrap Framework]
+- [Bootstrap Framework Source Files]
+
+[nvm]: https://github.com/nvm-sh/nvm
+[npm]: https://npmjs.com
+[Gulp]: https://gulpjs.com/
+[Sass]: http://sass-lang.com
+[Bootstrap Framework]: https://getbootstrap.com/
+[Bootstrap Framework Source Files]: https://github.com/twbs/bootstrap-sass
