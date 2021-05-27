@@ -1,0 +1,77 @@
+diff --git a/js/dropdown-widget.js b/js/dropdown-widget.js
+index b1a7466..459e421 100644
+--- a/js/dropdown-widget.js
++++ b/js/dropdown-widget.js
+@@ -40,6 +40,9 @@
+       $dropdown.addClass('facets-dropdown');
+       $dropdown.addClass('js-facets-widget');
+       $dropdown.addClass('js-facets-dropdown');
++      if ($ul.hasClass('js-multiple-select')) {
++        $dropdown.attr('multiple', 'multiple');
++      }
+ 
+       var id = $(this).data('drupal-facet-id');
+       // Add aria-labelledby attribute to reference label.
+@@ -71,11 +74,34 @@
+         }
+         $option.text($link.text());
+         $dropdown.append($option);
++        $dropdown.data('facetsPreviousValue', $dropdown.val());
+       });
+ 
+       // Go to the selected option when it's clicked.
+       $dropdown.on('change.facets', function () {
+-        var anchor = $($ul).find("[data-drupal-facet-item-id='" + $(this).find(':selected').data('drupalFacetItemId') + "']");
++        // var anchor = $($ul).find("[data-drupal-facet-item-id='" + $(this).find(':selected').data('drupalFacetItemId') + "']");
++        var anchor = [];
++        var current = $(this).val();
++        if (typeof current === 'string') {
++          // Single select
++          anchor = $($ul).find("[data-drupal-facet-item-id='" + $(this).find(':selected').data('drupalFacetItemId') + "']");
++        }
++        else {
++          // Multiple select.
++          var previous = $(this).data('facetsPreviousValue');
++          var added = $(current).not(previous).get();
++          var removed = $(previous).not(current).get();
++          var symDiff = added.concat(removed);
++          var filteredSymDiff = symDiff.filter(String);
++          if (0 in filteredSymDiff) {
++            anchor = $($ul).find("[href='" + filteredSymDiff[0] + "']");
++          }
++          else {
++            // If not, at least keep our house clean.
++            // This may only happen if our empty-text value was toggled.
++            $(this).data('facetsPreviousValue', current);
++          }
++        }
+         var $linkElement = (anchor.length > 0) ? $(anchor) : $ul.find('.default-option a');
+         var url = $linkElement.attr('href');
+ 
+diff --git a/src/Plugin/facets/widget/DropdownWidget.php b/src/Plugin/facets/widget/DropdownWidget.php
+index d93c8e5..2432cfc 100644
+--- a/src/Plugin/facets/widget/DropdownWidget.php
++++ b/src/Plugin/facets/widget/DropdownWidget.php
+@@ -32,6 +32,9 @@ class DropdownWidget extends WidgetPluginBase {
+   public function build(FacetInterface $facet) {
+     $build = parent::build($facet);
+     $build['#attributes']['class'][] = 'js-facets-dropdown-links';
++    if (!$facet->getShowOnlyOneResult()) {
++      $build['#attributes']['class'][] = 'js-multiple-select';
++    }
+     $build['#attached']['drupalSettings']['facets']['dropdown_widget'][$facet->id()]['facet-default-option-label'] = $this->getConfiguration()['default_option_label'];
+     $build['#attached']['library'][] = 'facets/drupal.facets.dropdown-widget';
+     $build['#attached']['library'][] = 'facets/drupal.facets.general';
+diff --git a/tests/src/Unit/Plugin/widget/DropdownWidgetTest.php b/tests/src/Unit/Plugin/widget/DropdownWidgetTest.php
+index 76a126e..594d751 100644
+--- a/tests/src/Unit/Plugin/widget/DropdownWidgetTest.php
++++ b/tests/src/Unit/Plugin/widget/DropdownWidgetTest.php
+@@ -33,7 +33,7 @@ class DropdownWidgetTest extends WidgetTestBase {
+     $this->assertInternalType('array', $output);
+     $this->assertCount(4, $output['#items']);
+ 
+-    $this->assertEquals(['facet-inactive', 'js-facets-dropdown-links'], $output['#attributes']['class']);
++    $this->assertEquals(['facet-inactive', 'js-facets-dropdown-links', 'js-multiple-select'], $output['#attributes']['class']);
+ 
+     $expected_links = [
+       $this->buildLinkAssertion('Llama', 'llama', $facet, 10),
