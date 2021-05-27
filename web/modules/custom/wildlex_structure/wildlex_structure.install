@@ -6,3 +6,11 @@ function wildlex_structure_update_8001() {
     ->condition('collection', 'update_fetch_task')
     ->execute();
 }
+
+/**
+ * refs #10162 - Delete values in field_money_value to allow increasing max length.
+ */
+function wildlex_structure_update_8002() {
+  \Drupal::database()->query("TRUNCATE node__field_money_value")->execute();
+  \Drupal::database()->query("TRUNCATE node_revision__field_money_value")->execute();
+}
