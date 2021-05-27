@@ -5,6 +5,7 @@ COPY load.environment.php composer.json composer.lock RoboFile.php /usr/share/ng
 COPY config config
 COPY scripts scripts
 COPY web web
+COPY patches patches
 # Workaround until https://helpdesk.eaudeweb.ro/issues/9184 is fixed
 COPY example.robo.yml robo.yml
 
