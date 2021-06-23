@@ -3,6 +3,7 @@
 namespace Drupal\iucn_search\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
@@ -62,7 +63,7 @@ class ExtraFiltersBlock extends BlockBase implements ContainerFactoryPluginInter
 
     $extraFilters = [];
     foreach ($filters as $index => $filter) {
-      list($type, $tid) = explode(':', $filter);
+      [$type, $tid] = explode(':', $filter);
       if (!in_array($type, $allowedExtraFilterTypes)) {
         continue;
       }
@@ -128,6 +129,10 @@ class ExtraFiltersBlock extends BlockBase implements ContainerFactoryPluginInter
     ];
 
     return $build;
+  }
+
+  public function getCacheContexts(){
+    return Cache::mergeContexts(parent::getCacheContexts(), ['url']);
   }
 
 }
