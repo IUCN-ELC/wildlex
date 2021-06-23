@@ -252,13 +252,13 @@ abstract class ElisConsumerDefaultSource extends SourcePluginBase {
    */
   public function prepareRow(Row $row) {
     $linkToFullText = [];
-    foreach (['English', 'French', 'Spanish'] as $language) {
-      if ($language == 'English') {
-        $lang = '';
-      }
-      else {
-        $lang = $language == 'French' ? 'Fr' : 'Sp';
-      }
+    $languages = [
+      'English' => '',
+      'Spanish' => 'Sp',
+      'French' => 'Fr',
+      'Other' => 'Other',
+    ];
+    foreach ($languages as $language => $lang) {
       $languageLinks = $row->getSourceProperty("linkToFullText$lang");
       if (!is_array($languageLinks)) {
         // Used str_replace('server2.php/', '', ...) because there is a bug in the urls from ELIS
